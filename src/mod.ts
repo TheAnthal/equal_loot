@@ -65,13 +65,18 @@ class Mod implements IPostDBLoadMod
         for (const mapName of maps)
         {
             const map = tables.locations[mapName];
-            // The probability per spawnpoints is broken on LH and Interchange for some reason
+
+            // The probability per spawnpoints is broken on LH and Interchange if this is set to 1 for some reason
             const int = "interchange";
             const lig = "lighthouse";
-            // Check to see if it's int/LH and skip
-            if (mapName == int || mapName == lig) 
+            if (mapName == int || mapName == lig)
             {
-                logger.logWithColor(`Skipping loose loot probability for ${mapName}`, LogTextColor.CYAN);
+                logger.logWithColor(`BUGFIX: Slightly nerfing looseLoot on ${mapName}`, LogTextColor.CYAN);
+                map.looseLoot.spawnpoints.forEach(spawn =>
+                {
+                    spawn.probability = 0.0999999999;
+                }
+                );
             }
             else
             {
@@ -82,6 +87,7 @@ class Mod implements IPostDBLoadMod
                 );
             }
         }
+        
         // Set probability for each item in the pool to be equal
         for (const mapName of maps)
         {
