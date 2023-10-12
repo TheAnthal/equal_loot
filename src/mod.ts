@@ -69,7 +69,9 @@ class Mod implements IPostDBLoadMod
             // The probability per spawnpoints is broken on LH and Interchange if this is set to 1 for some reason
             const int = "interchange";
             const lig = "lighthouse";
-            if (mapName == int || mapName == lig)
+            const facd = "factory4_day";
+            const facn = "factory4_night";
+            if (mapName == int || mapName == lig || mapName == facd || mapName == facn)
             {
                 logger.logWithColor(`BUGFIX: Slightly nerfing looseLoot on ${mapName}`, LogTextColor.CYAN);
                 map.looseLoot.spawnpoints.forEach(spawn =>
@@ -137,6 +139,44 @@ class Mod implements IPostDBLoadMod
             },
             // Lighthouse - Trainyard
             if ((spotBuffs.template.Position.x > -141) && (spotBuffs.template.Position.x < 60) && (spotBuffs.template.Position.y > 9) && (spotBuffs.template.Position.y < 13) && (spotBuffs.template.Position.z > -956) && (spotBuffs.template.Position.z < -788))
+            {
+                spotBuffs.probability = 1;
+            }
+        }
+        const facdSpawns = tables.locations.factory4_day.looseLoot.spawnpoints;
+        for (const spotBuffs of facdSpawns)
+        {
+            // Factory Day - Med Tent
+            if ((spotBuffs.template.Position.x > -22) && (spotBuffs.template.Position.x < 13) && (spotBuffs.template.Position.y > 0) && (spotBuffs.template.Position.y < 3) && (spotBuffs.template.Position.z > -36) && (spotBuffs.template.Position.z < -16))
+            {
+                spotBuffs.probability = 1;
+            },
+            // Factory Day - Under Med
+            if ((spotBuffs.template.Position.x > -18) && (spotBuffs.template.Position.x < 5) && (spotBuffs.template.Position.y > -4) && (spotBuffs.template.Position.y < -3) && (spotBuffs.template.Position.z > -36) && (spotBuffs.template.Position.z < -3))
+            {
+                spotBuffs.probability = 1;
+            },
+            // Factory Day - Office
+            if ((spotBuffs.template.Position.x > 8) && (spotBuffs.template.Position.x < 38) && (spotBuffs.template.Position.y > 0) && (spotBuffs.template.Position.y < 9) && (spotBuffs.template.Position.z > 32) && (spotBuffs.template.Position.z < 42))
+            {
+                spotBuffs.probability = 1;
+            }
+        }
+        const facnSpawns = tables.locations.factory4_night.looseLoot.spawnpoints;
+        for (const spotBuffs of facnSpawns)
+        {
+            // Factory Night - Med Tent
+            if ((spotBuffs.template.Position.x > -22) && (spotBuffs.template.Position.x < 13) && (spotBuffs.template.Position.y > 0) && (spotBuffs.template.Position.y < 3) && (spotBuffs.template.Position.z > -36) && (spotBuffs.template.Position.z < -16))
+            {
+                spotBuffs.probability = 1;
+            },
+            // Factory Night - Under Med
+            if ((spotBuffs.template.Position.x > -18) && (spotBuffs.template.Position.x < 5) && (spotBuffs.template.Position.y > -4) && (spotBuffs.template.Position.y < -3) && (spotBuffs.template.Position.z > -36) && (spotBuffs.template.Position.z < -3))
+            {
+                spotBuffs.probability = 1;
+            },
+            // Factory Night - Office
+            if ((spotBuffs.template.Position.x > 8) && (spotBuffs.template.Position.x < 38) && (spotBuffs.template.Position.y > 0) && (spotBuffs.template.Position.y < 9) && (spotBuffs.template.Position.z > 32) && (spotBuffs.template.Position.z < 42))
             {
                 spotBuffs.probability = 1;
             }
