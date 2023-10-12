@@ -87,6 +87,51 @@ class Mod implements IPostDBLoadMod
                 );
             }
         }
+        // Am I really hardcoding specific loot areas? Maybe
+        const intSpawns = tables.locations.interchange.looseLoot.spawnpoints;
+        for (const spotBuffs of intSpawns)
+        {
+            // Kiba
+            if ((spotBuffs.template.Position.x > -25) && (spotBuffs.template.Position.x < -10) && (spotBuffs.template.Position.y > 25) && (spotBuffs.template.Position.y < 29) && (spotBuffs.template.Position.z > -41) && (spotBuffs.template.Position.z < -14))
+            {
+                spotBuffs.probability = 1;
+            },
+            // Rasmussen
+            if ((spotBuffs.template.Position.x > 4) && (spotBuffs.template.Position.x < 35) && (spotBuffs.template.Position.y > 25) && (spotBuffs.template.Position.y < 29) && (spotBuffs.template.Position.z > 19) && (spotBuffs.template.Position.z < 33))
+            {
+                spotBuffs.probability = 1;
+            },
+            // Texho
+            if ((spotBuffs.template.Position.x > 47) && (spotBuffs.template.Position.x < 77) && (spotBuffs.template.Position.y > 25) && (spotBuffs.template.Position.y < 29) && (spotBuffs.template.Position.z > 41) && (spotBuffs.template.Position.z < 52))
+            {
+                spotBuffs.probability = 1;
+            },
+            // Techlight
+            if ((spotBuffs.template.Position.x > 81) && (spotBuffs.template.Position.x < 99) && (spotBuffs.template.Position.y > 34) && (spotBuffs.template.Position.y < 39) && (spotBuffs.template.Position.z > 32) && (spotBuffs.template.Position.z < 68))
+            {
+                spotBuffs.probability = 1;
+            },
+            // Goshan Lockers
+            if ((spotBuffs.template.Position.x > -73) && (spotBuffs.template.Position.x < -65) && (spotBuffs.template.Position.y > 25) && (spotBuffs.template.Position.y < 29) && (spotBuffs.template.Position.z > -4) && (spotBuffs.template.Position.z < 11))
+            {
+            spotBuffs.probability = 1;
+            },
+            // German
+            if ((spotBuffs.template.Position.x > -22) && (spotBuffs.template.Position.x < -8) && (spotBuffs.template.Position.y > 25) && (spotBuffs.template.Position.y < 29) && (spotBuffs.template.Position.z > -81) && (spotBuffs.template.Position.z < 66))
+            {
+            spotBuffs.probability = 1;
+            },
+            // Emercom
+            if ((spotBuffs.template.Position.x > 2) && (spotBuffs.template.Position.x < 35) && (spotBuffs.template.Position.y > 25) && (spotBuffs.template.Position.y < 29) && (spotBuffs.template.Position.z > -114) && (spotBuffs.template.Position.z < -98))
+            {
+            spotBuffs.probability = 1;
+            },
+            // UltraMed
+            if ((spotBuffs.template.Position.x > 63) && (spotBuffs.template.Position.x < 78) && (spotBuffs.template.Position.y > 34) && (spotBuffs.template.Position.y < 39) && (spotBuffs.template.Position.z > 38) && (spotBuffs.template.Position.z < 51))
+            {
+            spotBuffs.probability = 1;
+            }
+        }
         
         // Set probability for each item in the pool to be equal
         for (const mapName of maps)
