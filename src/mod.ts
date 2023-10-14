@@ -66,6 +66,7 @@ class Mod implements IPostDBLoadMod
             const map = tables.locations[mapName];
 
             // The probability per spawnpoints is broken on some maps if this is set to 1 for some reason
+			// Dumb fix, set 9 out of every 10 to 1, and the rest to 0.999999999
             const int = "interchange";
             const lig = "lighthouse";
             const facd = "factory4_day";
@@ -73,11 +74,19 @@ class Mod implements IPostDBLoadMod
             if (mapName == int || mapName == lig || mapName == facd || mapName == facn)
             {
                 logger.logWithColor(`BUGFIX: Slightly nerfing looseLoot on ${mapName}`, LogTextColor.CYAN);
-                map.looseLoot.spawnpoints.forEach(spawn =>
-                {
-                    spawn.probability = 0.0999999999;
-                }
-                );
+					map.looseLoot.spawnpoints.forEach((spawn, index) =>
+					{
+					if (index % 10 === 9)
+					{
+						spawn.probability = 0.999999999;
+					}
+					else
+					{
+						spawn.probability = 1;
+						
+					}
+					}
+					);
             }
             else
             {
