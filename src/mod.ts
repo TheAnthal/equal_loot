@@ -6,7 +6,6 @@ import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
 import { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
 import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
-import config from "../config.json"
 
 class Mod implements IPostDBLoadMod
 {
@@ -44,7 +43,7 @@ class Mod implements IPostDBLoadMod
             let mapLoose = locationsConfig.looseLootMultiplier[mapName];
             // logger.info(`${mapName} ${mapLoose}`);
             mapStatic *= 3;
-            mapLoose *= 20;
+            mapLoose *= 3;
             // logger.info(`${mapName} ${mapLoose}`);
         }
 
