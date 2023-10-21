@@ -6,6 +6,7 @@ import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
 import { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
 import { ILocationConfig } from "@spt-aki/models/spt/config/ILocationConfig";
+import  config from "../config/config.json"
 
 class Mod implements IPostDBLoadMod
 {
@@ -32,86 +33,102 @@ class Mod implements IPostDBLoadMod
 
         // Global looot chance modifier is default to 0.2. Cranking it to 1
         // Isn't doing anything?
-        //logger.info(`${tables.globals.GlobalLootChanceModifier}`);
-        //tables.globals.GlobalLootChanceModifier = 1;
-        //logger.info(`${tables.globals.GlobalLootChanceModifier}`);
+        //logger.info(`${tables.globals.config.GlobalLootChanceModifier}`);
+        //tables.globals.config.sGlobalLootChanceModifier = 1;
+        //logger.info(`${tables.globals.config.GlobalLootChanceModifier}`);
 
-        // Apply locations config 
-        for (const mapName in locationsConfig.looseLootMultiplier)
+        // Apply multipliers
+        if (config.static_loot_multiplier_enabled)
         {
-            let mapStatic = locationsConfig.staticLootMultiplier[mapName];
-            let mapLoose = locationsConfig.looseLootMultiplier[mapName];
-            // logger.info(`${mapName} ${mapLoose}`);
-            mapStatic *= 3;
-            mapLoose *= 3;
-            // logger.info(`${mapName} ${mapLoose}`);
-        }
-
-        logger.logWithColor(`Modifying Static Loot`, LogTextColor.CYAN);
-
-        // static loot probability
-        for (const crates in tables.loot.staticLoot)
-        {
-            const crate = tables.loot.staticLoot[crates];
-            crate.itemDistribution.forEach(item => 
-                item.relativeProbability = 1
-            );
-        }
-
-        logger.logWithColor(`Modifying Loose Loot`, LogTextColor.CYAN);
-
-        for (const mapName of maps)
-        {
-            const map = tables.locations[mapName];
-
-            // The probability per spawnpoints is broken on some maps if this is set to 1 for some reason
-			// Dumb fix, set 9 out of every 10 to 1, and the rest to 0.999999999
-            const int = "interchange";
-            const lig = "lighthouse";
-            const facd = "factory4_day";
-            const facn = "factory4_night";
-            if (mapName == int || mapName == lig || mapName == facd || mapName == facn)
+            for (const mapName in locationsConfig.looseLootMultiplier)
             {
-                logger.logWithColor(`BUGFIX: Slightly nerfing looseLoot on ${mapName}`, LogTextColor.CYAN);
-					map.looseLoot.spawnpoints.forEach((spawn, index) =>
-					{
-					if (index % 10 === 9)
-					{
-						spawn.probability = 0.999999999;
-					}
-					else
-					{
-						spawn.probability = 1;
-						
-					}
-					}
-					);
-            }
-            else
-            {
-                map.looseLoot.spawnpoints.forEach(spawn => 
-                {
-                    spawn.probability = 1;
-                }
-                );
+                let mapStatic = locationsConfig.staticLootMultiplier[mapName];
+
+                //logger.info(`${mapName} ${mapStatic}`);
+                mapStatic *= config.static_loot_multiplier;
+                //logger.info(`${mapName} ${mapStatic}`);
             }
         }
         
-        // Set probability for each item in the pool to be equal
-        for (const mapName of maps)
+        if (config.loose_loot_multiplier_enabled)
         {
-            const map = tables.locations[mapName];
-            map.looseLoot.spawnpoints.forEach(spawn =>
-                {
-                    spawn.itemDistribution.forEach(item =>
-                        item.relativeProbability = 1
-                    );
-                }
+            for (const mapName in locationsConfig.looseLootMultiplier)
+            {
+                let mapLoose = locationsConfig.looseLootMultiplier[mapName];
+                //logger.info(`${mapName} ${mapLoose}`);
+                mapLoose *= 3;
+                //logger.info(`${mapName} ${mapLoose}`);
+            }
+        }
+
+        if (config.spawnpoint_probability_enabled)
+        {
+            logger.logWithColor(`Modifying Static Loot`, LogTextColor.CYAN);
+            // static loot probability
+            for (const crates in tables.loot.staticLoot)
+            {
+                const crate = tables.loot.staticLoot[crates];
+                crate.itemDistribution.forEach(item => 
+                    item.relativeProbability = 1
                 );
             }
         }
 
+        if (config.item_distribution_enabled)
+        {
+            logger.logWithColor(`Modifying Loose Loot`, LogTextColor.CYAN);
 
+            for (const mapName of maps)
+            {
+                const map = tables.locations[mapName];
+
+                // The probability per spawnpoints is broken on some maps if this is set to 1 for some reason
+			    // Dumb fix, set 9 out of every 10 to 1, and the rest to 0.999999999
+                const int = "interchange";
+                const lig = "lighthouse";
+                const facd = "factory4_day";
+                const facn = "factory4_night";
+                if (mapName == int || mapName == lig || mapName == facd || mapName == facn)
+                {
+                    //logger.logWithColor(`BUGFIX: Slightly nerfing looseLoot on ${mapName}`, LogTextColor.CYAN);
+					    map.looseLoot.spawnpoints.forEach((spawn, index) =>
+					    {
+					    if (index % 10 === 9)
+					    {
+    						spawn.probability = 0.999999999;
+					    }
+					    else
+					    {
+    						spawn.probability = 1;
+                            
+					    }
+					    }
+					    );
+                }
+                else
+                {
+                    map.looseLoot.spawnpoints.forEach(spawn => 
+                    {
+                        spawn.probability = 1;
+                    }
+                    );
+                }
+            }
+        
+            // Set probability for each item in the pool to be equal
+            for (const mapName of maps)
+            {
+                const map = tables.locations[mapName];
+                map.looseLoot.spawnpoints.forEach(spawn =>
+                    {
+                        spawn.itemDistribution.forEach(item =>
+                            item.relativeProbability = 1
+                        );
+                    }
+                    );
+                }
+            }
+        }   
     }
 }
 
